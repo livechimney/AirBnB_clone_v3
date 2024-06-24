@@ -3,8 +3,19 @@
 Handles I/O, writing and reading, of JSON for storage of all class instances
 """
 import json
+<<<<<<< HEAD
 from models import base_model, amenity, city, place, review, state, user
 from datetime import datetime
+=======
+import models
+from models.amenity import Amenity
+from models.base_model import BaseModel
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
+from models.user import User
+>>>>>>> a75d183d98c819783e74a236d2eb41bd63ef1748
 
 strptime = datetime.strptime
 to_json = base_model.BaseModel.to_json
@@ -108,3 +119,33 @@ class FileStorage:
             calls the reload() method for deserialization from JSON to objects
         """
         self.reload()
+
+    def get(self, cls, id):
+        """
+        Returns the object based on the class name and its ID, or
+        None if not found
+        """
+        if cls not in classes.values():
+            return None
+
+        all_cls = models.storage.all(cls)
+        for value in all_cls.values():
+            if (value.id == id):
+                return value
+
+        return None
+
+    def count(self, cls=None):
+        """
+        count the number of objects in storage
+        """
+        all_class = classes.values()
+
+        if not cls:
+            count = 0
+            for clas in all_class:
+                count += len(models.storage.all(clas).values())
+        else:
+            count = len(models.storage.all(cls).values())
+
+        return count
